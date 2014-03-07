@@ -1,0 +1,63 @@
+<html>
+<head>
+    <script src="lib/angular/angular.js"></script>
+    <script>
+        var app = angular.module('myApp', []);
+
+        app.service('sharedProperties', function() {
+            var stringValue = 'test string value';
+            var objectValue = {
+                data: 'test object value'
+            };
+    
+        return {
+            getString: function() {
+                return stringValue;
+            },
+            setString: function(value) {
+                stringValue = value;
+            },
+            getObject: function() {
+                return objectValue;
+            }
+        }   
+        });
+
+app.controller('myController1', function($scope, $timeout, sharedProperties) {
+    $scope.stringValue = sharedProperties.getString();
+    $scope.objectValue = sharedProperties.getObject().data;    
+});
+
+app.controller('myController2', function($scope, sharedProperties) {
+    $scope.stringValue = sharedProperties.getString;
+    $scope.objectValue = sharedProperties.getObject();
+    $scope.setString = function(newValue) {
+        $scope.objectValue.data = newValue;
+        sharedProperties.setString(newValue);
+    };
+});
+    
+    </script>
+</head>
+<body>
+    <div ng-app="myApp">
+    <div ng-controller="myController1">
+        <ul>
+            <li><b>myController1</b> (values won't change)</li>
+            <li>{{stringValue}}</li>
+            <li>{{objectValue}}</li>
+        </ul>
+    </div>    
+    <div ng-controller="myController2">
+        <ul>
+            <li><b>myController2</b> (values will change when Set Values is clicked or when 2-way binding textbox is modified)</li>
+            <li>{{stringValue()}}</li>
+            <li>{{objectValue.data}}</li>
+        </ul>
+        <input type="text" ng-model="newValue"></input>
+        <button ng-click="setString(newValue)">Set Values</button><br/>
+        <input type="text" ng-model="objectValue.data"></input>2-way binding to objectValue
+    </div>
+</div>
+</body>
+</html>

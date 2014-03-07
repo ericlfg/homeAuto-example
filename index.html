@@ -1,0 +1,65 @@
+<html ng-app="homeAuto">
+    <head>
+        <script src="lib/angular/angular.js"></script>
+        <script>
+            var app = angular.module('homeAuto',[]);
+            
+            app.controller("lightCtrl", function($scope) {
+                $scope.rooms = [
+				    {'name': 'kitchen', 'floor': 1,'numOfLights': 3}, 
+                    {'name': 'dinning room', 'floor': 1, 'numOfLights': 1}, 
+                    {'name': 'family room', 'floor': 1, 'numOfLights': 4},
+                    {'name': 'den', 'floor': 2, 'numOfLights': 2}
+                ];
+                
+                $scope.lightsArray = [];
+                
+                for (var i=0;i<$scope.rooms.length;i++){
+                    t = 1;
+                    for (var x=0;x<$scope.rooms[i].numOfLights;x++){
+                        $scope.lightsArray.push({'roomID':$scope.rooms[i].name + '_' + t, 'state':0});
+                        t++;
+                    }
+                }
+                console.log($scope.lightsArray);
+                
+                
+            }); 
+            
+            
+        </script>
+        <style>
+            th {text-align: left;}
+        
+        </style>
+        
+    </head>
+    <body ng-controller="lightCtrl">
+        <table>
+            <tr>
+                <th>Room</th>
+                <th>Floor of house</th>
+                <th>Number of lights</th>
+                <th>Update # of Lights</th>
+            </tr>
+           
+            <tr ng-repeat="i in rooms">
+                <td>{{i.name}}</td>
+                <td>{{i.floor}}</td>
+                <td>{{i.numOfLights}}</td>
+                <td><input type="text" ng-model="rooms[$index].numOfLights"></td>
+                <tr>
+                    <td colspan="4" style="text-align:right">
+                        <div>Update Lights!</div>
+                    </td>
+                </tr>
+            </tr>
+            
+            <tr ng-repeat="x in lightsArray">
+                <td ng-bind="lightsArray[$index].roomID">{{x.roomID}}</td>
+            </tr>
+            
+        </table>
+        
+    </body>
+</html>
